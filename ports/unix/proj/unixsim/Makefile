@@ -36,6 +36,7 @@ CC=gcc
 #To compile for cygwin: make ARCH=cygwin
 ARCH=unix
 CFLAGS=-g -Wall -D$(ARCH) -DIPv4 -DLWIP_DEBUG -pedantic -Werror \
+	-Wno-error=address \
 	-Wparentheses -Wsequence-point -Wswitch-default \
 	-Wextra -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast \
 	-Wc++-compat -Wwrite-strings -Wold-style-definition \
