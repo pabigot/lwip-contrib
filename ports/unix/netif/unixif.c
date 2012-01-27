@@ -83,7 +83,7 @@ struct unixif {
 static int
 unix_socket_client(const char *name)
 {
-  int fd, len;
+  int fd;
   struct sockaddr_un unix_addr;
 
                                 /* create a Unix domain stream socket */
@@ -97,11 +97,7 @@ unix_socket_client(const char *name)
   unix_addr.sun_family = AF_UNIX;
   snprintf(unix_addr.sun_path, sizeof(unix_addr.sun_path), "%s%05d", "/var/tmp/", getpid());
 #if !defined(linux) && !defined(cygwin) && !defined(__CYGWIN__)
-  len = sizeof(unix_addr.sun_len) + sizeof(unix_addr.sun_family) +
-    strlen(unix_addr.sun_path) + 1;
-  unix_addr.sun_len = len;
-#else
-  len = sizeof(unix_addr.sun_family) +
+  unix_addr.sun_len = sizeof(unix_addr.sun_len) + sizeof(unix_addr.sun_family) +
     strlen(unix_addr.sun_path) + 1;
 #endif /* linux */
 
@@ -121,11 +117,8 @@ unix_socket_client(const char *name)
   unix_addr.sun_family = AF_UNIX;
   strcpy(unix_addr.sun_path, name);
 #if !defined(linux) && !defined(cygwin) && !defined(__CYGWIN__)
-  len = sizeof(unix_addr.sun_len) + sizeof(unix_addr.sun_family) +
+  unix_addr.sun_len = sizeof(unix_addr.sun_len) + sizeof(unix_addr.sun_family) +
     strlen(unix_addr.sun_path) + 1;  
-  unix_addr.sun_len = len;
-#else
-  len = sizeof(unix_addr.sun_family) + strlen(unix_addr.sun_path) + 1;
 #endif /* linux */
   if (connect(fd, (struct sockaddr *) &unix_addr,
 	     sizeof(struct sockaddr_un)) < 0) {
@@ -139,7 +132,7 @@ unix_socket_client(const char *name)
 static int
 unix_socket_server(const char *name)
 {
-  int fd, len;
+  int fd;
   struct sockaddr_un unix_addr;
 
   /* create a Unix domain stream socket */
@@ -155,11 +148,7 @@ unix_socket_server(const char *name)
   unix_addr.sun_family = AF_UNIX;
   strcpy(unix_addr.sun_path, name);
 #if !defined(linux) && !defined(cygwin) && !defined(__CYGWIN__)
-  len = sizeof(unix_addr.sun_len) + sizeof(unix_addr.sun_family) +
-    strlen(unix_addr.sun_path) + 1;
-  unix_addr.sun_len = len;
-#else
-  len = sizeof(unix_addr.sun_family) +
+  unix_addr.sun_len = sizeof(unix_addr.sun_len) + sizeof(unix_addr.sun_family) +
     strlen(unix_addr.sun_path) + 1;
 #endif /* linux */
 
